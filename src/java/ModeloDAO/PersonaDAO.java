@@ -22,10 +22,11 @@ public class PersonaDAO implements CRUD {
     PreparedStatement ps;
     ResultSet rs;
     Persona p = new Persona();
+    String estado;
 
     @Override
     public List listar() {
-        String estado;
+
         ArrayList<Persona> list = new ArrayList<>();
         String sql = "select * from tbpersona where estper='A'";
         try {
@@ -66,11 +67,10 @@ public class PersonaDAO implements CRUD {
                 p.setNombre(rs.getString("nomper"));
                 p.setEmail(rs.getString("emlper"));
                 p.setTelefono(rs.getString("telper"));
-
             }
-         
+
         } catch (Exception e) {
- System.out.println("Error listp " + e);
+            System.out.println("Error listp " + e);
         }
         return p;
 
@@ -93,7 +93,7 @@ public class PersonaDAO implements CRUD {
     @Override
     public boolean edit(Persona per) {
 
-        String sql = "update tbpersona set dniper='" + per.getDNI() + "',nomper='" + per.getNombre() + "',emlper='" + per.getEmail() + "',telper '" + per.getTelefono() + "' where codper=" + per.getID();
+        String sql = "update tbpersona set dniper='" + per.getDNI() + "',nomper='" + per.getNombre() + "',emlper='" + per.getEmail() + "',telper='" + per.getTelefono() + "' where codper=" + per.getID();
         try {
             con = cn.getConection();
             ps = con.prepareStatement(sql);
@@ -107,7 +107,47 @@ public class PersonaDAO implements CRUD {
 
     @Override
     public boolean dele(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "update tbpersona set estper='I' where codper=" + id;
+        try {
+            con = cn.getConection();
+            ps = con.prepareStatement(sql);
+            ps.executeUpdate();
+            return true;
+        } catch (Exception e) {
+
+        }
+        return false;
+    }
+
+    @Override
+    public List buscar(String texto) {
+        ArrayList<Persona> lista = new ArrayList<>();
+        String sql = "select * from tbpersona where estper='A' and dniper like %'" + texto + "'% or nomper like %'" + texto + "'% or emlper like %'" + texto + "'% or telper like %'" + texto + "'%";
+        
+        try{
+            con = cn.getConection();
+         ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            Persona per = new Persona();
+            per.setID(rs.getInt("codper"));
+            per.setDNI(rs.getString("dniper"));
+            per.setNombre(rs.getString("nomper"));
+            per.setEmail(rs.getString("emlper"));
+            per.setTelefono(rs.getString("telper"));
+            estado = rs.getString("estper");
+            switch (estado) {
+                case "A":
+                    estado = "Activo";
+            }
+            per.setEstado(estado);
+            lista.add(per);
+        }
+        }catch(Exception e){
+        
+        }
+       
+        return lista;
     }
 
 }

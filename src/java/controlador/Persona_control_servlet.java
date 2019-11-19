@@ -9,6 +9,7 @@ import Modelo.Persona;
 import ModeloDAO.PersonaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,7 +22,7 @@ public class Persona_control_servlet extends HttpServlet {
 
     String listar = "vistas/listar.jsp";
     String add = "vistas/add.jsp";
-    String edit = "vistas/Editar.jsp";
+    String edit = "vistas/edit.jsp";
     Persona p = new Persona();
     PersonaDAO dao = new PersonaDAO();
 
@@ -47,6 +48,7 @@ public class Persona_control_servlet extends HttpServlet {
             throws ServletException, IOException {
         String acceso = "";
         String action = request.getParameter("accion");
+        
         if (action.equalsIgnoreCase("listar")) {
             acceso = listar;
         } else if (action.equalsIgnoreCase("add")) {
@@ -64,7 +66,7 @@ public class Persona_control_servlet extends HttpServlet {
             dao.add(p);
             acceso = listar;
         } else if (action.equalsIgnoreCase("editar")) {
-            request.setAttribute("codper", request.getParameter("id"));
+            request.setAttribute("idper", request.getParameter("id"));
             acceso = edit;
            
         } else if (action.equalsIgnoreCase("actualziar")) {
@@ -75,11 +77,21 @@ public class Persona_control_servlet extends HttpServlet {
             String emlper = request.getParameter("txtemal");
             String tlfper = request.getParameter("txttelf");
             p.setID(id);
+            p.setDNI(dni);
             p.setNombre(nomper);
             p.setEmail(emlper);
             p.setTelefono(tlfper);
             dao.edit(p);
             acceso = listar;
+        }else if(action.equalsIgnoreCase("eliminar")){
+        int id= Integer.parseInt(request.getParameter("id"));
+        p.setID(id);
+        dao.dele(id);
+        acceso = listar;
+        }else if(action.equalsIgnoreCase("buscar")){
+        String dato = request.getParameter("buscarper");
+        List<Persona>lista=dao.buscar(dato);
+        request.setAttribute("datos",lista);
         }
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);

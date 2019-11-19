@@ -1,4 +1,5 @@
 package Interfaces;
+
 import Modelo.Persona;
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface CRUD {
     public boolean edit(Persona per);
 
     public boolean dele(int id);
+
+    public List buscar(String texto);
 }

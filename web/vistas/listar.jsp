@@ -16,31 +16,34 @@
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Lista Persona</title>
-        <!-- Compiled and minified CSS -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.css">
-        <!-- Compiled and minified JavaScript -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.js"></script>
-
-    </head>
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="asest/css/bootstrap.css" rel="stylesheet" type="text/css"/></head>
     <body>
-        <nav class="nav-extended">
-            <div class="nav-wrapper">
-                <a href="#!" class="brand-logo">Logo</a>
-                <ul class="right hide-on-med-and-down">
-                    <li><a>A link</a></li>
-                    <li><a>A second link</a></li>
-                    <li><a>A third link</a></li>
-                </ul>
+
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">CRUD_JAVA</a>
+            </nav>
+
+            <div class="row">
+                <div class="col-sm">
+                    <a class="btn btn-primary btn-lg" href="Persona_control_servlet?accion=add">Nuevo</a>
+                </div>
+                <div class="col-sm">
+
+                </div>
+                <div class="col-sm">
+                    <form class="form-inline" action="Persona_control_servlet">
+                        <label class="sr-only" for="buscarper">Buscar Persona</label>
+                        <input type="search" class="form-control mb-2 mr-sm-2" id="buscarper" name="buscarper" placeholder="Buscar Persona">
+                        <button type="submit" name="accion" value="buscar" class="btn btn-success mb-2">Buscar</button>
+                    </form>
+                </div>
             </div>
-            <div class="nav-content">
-                <span class="nav-title">Lista Personal</span>
-                <a href="Persona_control_servlet?accion=add" class="btn-floating btn-large halfway-fab waves-effect waves-light teal">
-                    <i class="material-icons">add</i>
-                </a>
-            </div>
-        </nav>
-        <div class="container">   
-            <table class="responsive-table">
+
+
+            <table class="table table-bordered">
                 <thead>
                     <tr>  
                         <th>Nro</th>
@@ -59,10 +62,10 @@
                         List<Persona> list = dao.listar();
                         Iterator<Persona> iter = list.iterator();
                         Persona per = null;
-                        int cont=0;
+                        int cont = 0;
                         while (iter.hasNext()) {
-                            cont=cont+1;
-                            per = iter.next();                            
+                            cont = cont + 1;
+                            per = iter.next();
                     %>
                     <tr>
                         <td><%=cont%></td>
@@ -72,13 +75,14 @@
                         <td><%=per.getTelefono()%></td>
                         <td><%=per.getEstado()%></td> 
                         <td>
-                            <a class="waves-effect waves-light btn" href="Persona_control_servlet?accion=editar&id=<%=per.getID() %>" >Editar</a>
-                            <a class="waves-effect waves-light btn">Remove</a>
+                            <a class="btn btn-info" href="Persona_control_servlet?accion=editar&id=<%=per.getID()%>"><i class="small material-icons left">edit</i>Editar</a>
+                            <a class="btn btn-danger" href="Persona_control_servlet?accion=eliminar&id=<%=per.getID()%>">Remove</a>
                         </td>
                     </tr>
                     <%}%>
                 </tbody>
             </table>
         </div>
+        <script src="asest/js/bootstrap.js" type="text/javascript"></script>
     </body>
 </html>
